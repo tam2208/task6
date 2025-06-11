@@ -1,32 +1,43 @@
 # task6
 # Task 6: Sales Trend Analysis Using Aggregations
 
-##  Objective
-Analyze monthly revenue and order volume using SQL aggregation techniques.
+## Objective
+Analyze monthly revenue and order volume from the `online_sales_dataset.csv`.
 
 ## Tools Used
-- Dataset: `online_sales_dataset.csv`
-- SQL dialect: SQLite (works with MySQL/PostgreSQL with minor syntax changes)
-- Python (for data preview and CSV result generation)
+- SQL (compatible with SQLite / MySQL / PostgreSQL)
+- Python (for result preview)
+- Pandas (for local testing)
 
-##  Dataset Overview
-The dataset contains records of online sales transactions, including:
-- `InvoiceDate`: Date and time of the order
-- `InvoiceNo`: Unique order number
-- `Quantity` and `UnitPrice`: Used to calculate revenue
+## Dataset Fields Used
+- `InvoiceNo` → acts as `order_id`
+- `InvoiceDate` → order date
+- `Quantity` and `UnitPrice` → used to compute `Revenue`
 
-## SQL Analysis Steps
-```sql
-SELECT 
-    STRFTIME('%Y', InvoiceDate) AS Year,
-    STRFTIME('%m', InvoiceDate) AS Month,
-    ROUND(SUM(Quantity * UnitPrice), 2) AS Total_Revenue,
-    COUNT(DISTINCT InvoiceNo) AS Order_Count
-FROM 
-    online_sales
-WHERE
-    Quantity > 0 AND UnitPrice > 0
-GROUP BY 
-    Year, Month
-ORDER BY 
-    Year, Month;
+## SQL Logic
+1. Extract Year and Month from `InvoiceDate`
+2. Group by Year and Month
+3. Compute:
+   - `SUM(Quantity * UnitPrice)` → Total Revenue
+   - `COUNT(DISTINCT InvoiceNo)` → Order Count
+4. Order results by Year and Month
+
+## Sample SQL Output Format
+
+| Year | Month | Total_Revenue | Order_Count |
+|------|-------|----------------|--------------|
+| 2020 | 1     | 12567.89       | 938          |
+| 2020 | 2     | 14203.54       | 1003         |
+| 2020 | 3     | 15456.32       | 1107         |
+
+## How to Run
+1. Create a table using the provided schema.
+2. Import the dataset into your SQL environment.
+3. Run the SQL script from `task6.sql`.
+
+---
+
+## Notes
+- Make sure to clean negative values (returns/errors).
+- Adjust `STRFTIME()` to `EXTRACT()` if not using SQLite.
+
